@@ -98,21 +98,29 @@
     .footer i {
       color: #facc15;
     }
+    .bottom-buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2><i class="fa-solid fa-ruler-combined"></i> ডাইমেনশন এন্ট্রি</h2>
-    <div class="subtitle"><strong>Saju Guru</strong> <i class="fa-solid fa-fire"></i></div><input type="text" id="xValue" placeholder="X মাপ (উদাহরণ: 24)">
+    <div class="subtitle">পরিকল্পনা করেছেন: <strong>Saju Guru</strong> <i class="fa-solid fa-fire"></i></div><input type="text" id="xValue" placeholder="X মাপ (উদাহরণ: 24)">
 <input type="text" id="yValue" placeholder="Y মাপ (উদাহরণ: 36)">
 <br>
 <button onclick="addDimension()"><i class="fa-solid fa-plus"></i> সাবমিট</button>
-<button onclick="downloadScreenshot()"><i class="fa-solid fa-download"></i> ডাউনলোড ছবি</button>
 
 <div id="dimensions" class="dimensions"></div>
 
+<div class="bottom-buttons">
+  <button onclick="downloadScreenshot()"><i class="fa-solid fa-download"></i> ডাউনলোড ছবি</button>
+  <button onclick="clearDimensions()"><i class="fa-solid fa-trash"></i> ক্লিয়ার সব</button>
+</div>
+
   </div>  <div class="footer">
-    Made with <i class="fa-solid fa-heart"></i> by DK Shuvo CNC Designer
+    Made with <i class="fa-solid fa-heart"></i> by Saju CNC Designer
   </div>  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>  <script>
     const dimensionDiv = document.getElementById('dimensions');
 
@@ -144,6 +152,13 @@
       document.getElementById('yValue').value = '';
     }
 
+    function clearDimensions() {
+      if (confirm('তুই কি সত্যিই সব মাপ ডিলিট করতে চাস?')) {
+        localStorage.removeItem('dimensions');
+        loadDimensions();
+      }
+    }
+
     function downloadScreenshot() {
       html2canvas(dimensionDiv).then(canvas => {
         const link = document.createElement('a');
@@ -155,4 +170,4 @@
 
     window.onload = loadDimensions;
   </script></body>
-  </html>
+</html>
