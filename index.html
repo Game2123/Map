@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ডাইমেনশন লজ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      padding: 20px;
+      color: #f1f5f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: scale(1.01);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #facc15;
+      font-size: 28px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #94a3b8;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 12px;
+      width: calc(50% - 12px);
+      margin-right: 10px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      font-size: 16px;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 12px;
+      transition: background 0.3s, transform 0.2s;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      transform: translateY(-2px);
+    }
+    .dimensions {
+      margin-top: 25px;
+      padding: 20px;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background-color: #0f172a;
+    }
+    .entry {
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      background-color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #e2e8f0;
+      font-size: 16px;
+    }
+    .entry i {
+      color: #facc15;
+    }
+    .label {
+      font-weight: bold;
+      color: #38bdf8;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #64748b;
+    }
+    .footer i {
+      color: #facc15;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2><i class="fa-solid fa-ruler-combined"></i> ডাইমেনশন এন্ট্রি</h2>
+    <div class="subtitle"><strong>Saju Guru</strong> <i class="fa-solid fa-fire"></i></div><input type="text" id="xValue" placeholder="X মাপ (উদাহরণ: 24)">
+<input type="text" id="yValue" placeholder="Y মাপ (উদাহরণ: 36)">
+<br>
+<button onclick="addDimension()"><i class="fa-solid fa-plus"></i> সাবমিট</button>
+<button onclick="downloadScreenshot()"><i class="fa-solid fa-download"></i> ডাউনলোড ছবি</button>
+
+<div id="dimensions" class="dimensions"></div>
+
+  </div>  <div class="footer">
+    Made with <i class="fa-solid fa-heart"></i> by DK Shuvo CNC Designer
+  </div>  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>  <script>
+    const dimensionDiv = document.getElementById('dimensions');
+
+    function loadDimensions() {
+      const data = JSON.parse(localStorage.getItem('dimensions')) || [];
+      dimensionDiv.innerHTML = '';
+      data.forEach(d => {
+        const entry = document.createElement('div');
+        entry.className = 'entry';
+        entry.innerHTML = `
+          <i class='fa-solid fa-vector-square'></i>
+          <span class="label">Y:</span> ${d.y} <span class="label">X:</span> ${d.x}
+        `;
+        dimensionDiv.appendChild(entry);
+      });
+    }
+
+    function addDimension() {
+      const x = document.getElementById('xValue').value.trim();
+      const y = document.getElementById('yValue').value.trim();
+      if (!x || !y) return alert('দয়া করে দুইটা মাপই দাও বস!');
+
+      const data = JSON.parse(localStorage.getItem('dimensions')) || [];
+      data.push({ x, y });
+      localStorage.setItem('dimensions', JSON.stringify(data));
+      loadDimensions();
+
+      document.getElementById('xValue').value = '';
+      document.getElementById('yValue').value = '';
+    }
+
+    function downloadScreenshot() {
+      html2canvas(dimensionDiv).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'dimensions.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    window.onload = loadDimensions;
+  </script></body>
+  </html>
